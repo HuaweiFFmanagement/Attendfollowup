@@ -1,0 +1,1331 @@
+{
+  "reportDate": "01/06/2026",
+  "supervisors": [
+    {
+      "name": "Aconcha Moreno Oscar Alberto",
+      "totalCupos": 9.0,
+      "totalPresentes": 7,
+      "pct": 78,
+      "stores": [
+        {
+          "storeCode": "SCOL11001110100",
+          "store": "Cav Bogota Toberin",
+          "account": "CLARO",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL11001430188",
+          "store": "Falabella Galerias",
+          "account": "Falabella",
+          "cupos": 0.5,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL25175430571",
+          "store": "Falabella Fontanar",
+          "account": "Falabella",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL11001430313",
+          "store": "Ktronix Suba",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SGSCO091802",
+          "store": "Panamericana Suba Plaza",
+          "account": "Panamericana",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL11001430444",
+          "store": "Panamericana Avenida Chile",
+          "account": "Panamericana",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL11001110211",
+          "store": "Cav Santafe T",
+          "account": "CLARO",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL11001110056",
+          "store": "Cav Bogota Chapinero",
+          "account": "CLARO",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL11001430194",
+          "store": "Falabella Plaza Imperial",
+          "account": "Falabella",
+          "cupos": 0.5,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL11001430196",
+          "store": "Falabella Santa Fe Bog",
+          "account": "Falabella",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL11001110824",
+          "store": "Cav Plaza Imperial T",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL25175430566",
+          "store": "Ktronix Cc Fontanar Cajica",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL11001430012",
+          "store": "Alkosto 170",
+          "account": "Alkosto",
+          "cupos": 3.0,
+          "presentes": 3,
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "name": "Angie Rocio Calderon Arenis",
+      "totalCupos": 3.0,
+      "totalPresentes": 2,
+      "pct": 67,
+      "stores": [
+        {
+          "storeCode": "SCOL54001430393",
+          "store": "Alkomprar Cucuta",
+          "account": "Alkomprar",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL68001430304",
+          "store": "Ktronix Bucaramanga",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL54001110061",
+          "store": "Cav Gran Colombia Cúcuta",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL68276430391",
+          "store": "Alkosto Floridablanca",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "name": "Bermúdez Sariel Renzo Rafael",
+      "totalCupos": 6.0,
+      "totalPresentes": 4,
+      "pct": 67,
+      "stores": [
+        {
+          "storeCode": "SCOL13001430187",
+          "store": "Falabella El Castillo",
+          "account": "Falabella",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL70001430162",
+          "store": "Alkosto Sincelejo",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SGSCO091810",
+          "store": "Panamericana Buenavista",
+          "account": "Panamericana",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL08001110048",
+          "store": "Cav Barranquilla Metropolitano",
+          "account": "CLARO",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL08001110047",
+          "store": "Cav B/Quilla Centro",
+          "account": "CLARO",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SGSCO083684",
+          "store": "Cav Parque Alegra",
+          "account": "CLARO",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL08001430017",
+          "store": "Alkomprar Unico Barranquilla",
+          "account": "Alkomprar",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SGSCO027719",
+          "store": "Falabella Buenavista",
+          "account": "Falabella",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL47001110097",
+          "store": "Cav Santa Marta Buenavista",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL13001110613",
+          "store": "Cav Cartagena Ejecutivos",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SGSCO082615",
+          "store": "Ktronix Barranquilla",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL08001430045",
+          "store": "Alkosto Barranquilla",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "name": "Cedeño Cordoba Ruben Alejandro",
+      "totalCupos": 6.0,
+      "totalPresentes": 3,
+      "pct": 50,
+      "stores": [
+        {
+          "storeCode": "SCOL50001110784",
+          "store": "Cav La Felicidad Bogota",
+          "account": "CLARO",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL25473110488",
+          "store": "Cav Mosquera T",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL11001110071",
+          "store": "Cav Bogota Fontibon",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL25473430308",
+          "store": "Ktronix Mosquera",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL11001430129",
+          "store": "Falabella La Felicidad",
+          "account": "Falabella",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL17380110030",
+          "store": "Cav La Dorada",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL11001110041",
+          "store": "Cav Bogota Alamos",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SGSCO027717",
+          "store": "Alkosto El Eden",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "name": "Diaz Hernandez Ingrid Kimberly",
+      "totalCupos": 10.0,
+      "totalPresentes": 9,
+      "pct": 90,
+      "stores": [
+        {
+          "storeCode": "SCOL50001430317",
+          "store": "Ktronix Villavicencio",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SGSCO091804",
+          "store": "Panamericana Plaza de las Americas",
+          "account": "Panamericana",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL25754110115",
+          "store": "Cav Ventura Terrero",
+          "account": "CLARO",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SGSCO093271",
+          "store": "Tienda Paseo Villa Del Rio",
+          "account": "CLARO",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL50001430285",
+          "store": "Falabella Primavera",
+          "account": "Falabella",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL11001110037",
+          "store": "Cav Plaza De Las Américas",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL85001110107",
+          "store": "Cav Yopal",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL11001110112",
+          "store": "Bosa Gran Plaza",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL11001110076",
+          "store": "Cav Bogota Kennedy",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL50001110106",
+          "store": "Cav Villavicencio Villa Centro",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL25754110099",
+          "store": "Cav Soacha Mercurio Ii",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL11001430310",
+          "store": "Ktronix Plaza De Las Americas",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL25754430039",
+          "store": "Ktronix Soacha",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL50001430021",
+          "store": "Alkosto Villavicencio Princ Cl. 31",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "name": "Estevez Perez Sneider",
+      "totalCupos": 5.0,
+      "totalPresentes": 4,
+      "pct": 80,
+      "stores": [
+        {
+          "storeCode": "SCOL05001110458",
+          "store": "Cav Mayorca",
+          "account": "CLARO",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL05001430197",
+          "store": "Falabella Santafe Med",
+          "account": "Falabella",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL05001430006",
+          "store": "Alkomprar Mayorca",
+          "account": "Alkomprar",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SGSCO091812",
+          "store": "Panamericana Poblado Medellin",
+          "account": "Panamericana",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL68615110095",
+          "store": "Cav Rionegro",
+          "account": "CLARO",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL68615430008",
+          "store": "Alkomprar Rionegro",
+          "account": "Alkomprar",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL05266110682",
+          "store": "Cav Medellin Sao Paulo",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL05001430314",
+          "store": "Ktronix Tesoro",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL05001430311",
+          "store": "Ktronix Poblado",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SGSCO027718",
+          "store": "Ktronix Arkadia",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "name": "García Arana Brayan Steven",
+      "totalCupos": 5.0,
+      "totalPresentes": 5,
+      "pct": 100,
+      "stores": [
+        {
+          "storeCode": "SCOL05001430007",
+          "store": "Alkomprar Molinos",
+          "account": "Alkomprar",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL05088430002",
+          "store": "Alkomprar Bello",
+          "account": "Alkomprar",
+          "cupos": 0.5,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL05001430004",
+          "store": "Alkomprar Florida",
+          "account": "Alkomprar",
+          "cupos": 0.5,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL05001230735",
+          "store": "Panamericana Molinos Medellin",
+          "account": "Panamericana",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL05001430009",
+          "store": "Alkomprar San Diego",
+          "account": "Alkomprar",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL05001430295",
+          "store": "Alkomprar Aventura",
+          "account": "Alkomprar",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SGSCO080811",
+          "store": "Alkomprar Fabricato",
+          "account": "Alkomprar",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SGSCO093272",
+          "store": "Alkomprar C.C. La Central",
+          "account": "Alkomprar",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SGSCO027720",
+          "store": "Falabella Arkadia",
+          "account": "Falabella",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL05001110077",
+          "store": "Cav Medellin Molinos",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 2,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL05001430195",
+          "store": "Falabella San Diego",
+          "account": "Falabella",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL05088110092",
+          "store": "Cav Medellin Puerta Del Norte",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL05001110080",
+          "store": "Cav Medellin Av Colombia",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "name": "HES",
+      "totalCupos": 5.0,
+      "totalPresentes": 3,
+      "pct": 60,
+      "stores": [
+        {
+          "storeCode": "SGSCO089511",
+          "store": "Plaza Central HES",
+          "account": "HES",
+          "cupos": 2.0,
+          "presentes": 1,
+          "pct": 50
+        },
+        {
+          "storeCode": "SGSCO091250",
+          "store": "Multiplaza HES",
+          "account": "HES",
+          "cupos": 2.0,
+          "presentes": 1,
+          "pct": 50
+        },
+        {
+          "storeCode": "SGSCO091251",
+          "store": "Santafe HES",
+          "account": "HES",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "name": "Mahecha De La Portilla Juan David",
+      "totalCupos": 6.0,
+      "totalPresentes": 4,
+      "pct": 67,
+      "stores": [
+        {
+          "storeCode": "SCOL76001430572",
+          "store": "Falabella Jardin Plaza",
+          "account": "Falabella",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL76001110053",
+          "store": "Cav Cali Palmetto",
+          "account": "CLARO",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL76001110073",
+          "store": "Cav Cali Jardin",
+          "account": "CLARO",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SGSCO080589",
+          "store": "Alkomprar Jardin Plaza",
+          "account": "Alkomprar",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL76001430015",
+          "store": "Alkosto Cali Cr. 80",
+          "account": "Alkosto",
+          "cupos": 3.0,
+          "presentes": 2,
+          "pct": 67
+        },
+        {
+          "storeCode": "SCOL76147110033",
+          "store": "Cav Cartago",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL19001110089",
+          "store": "Cav Popayan Plaza Colonial",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "name": "Romero Herrera Manuel Fernando",
+      "totalCupos": 7.0,
+      "totalPresentes": 2,
+      "pct": 29,
+      "stores": [
+        {
+          "storeCode": "SCOL11001430033",
+          "store": "Falabella Plaza Central",
+          "account": "Falabella",
+          "cupos": 0.5,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL11001430189",
+          "store": "Falabella Hayuelos Cl 20",
+          "account": "Falabella",
+          "cupos": 0.5,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL15001110102",
+          "store": "Cav Tunja La Sexta",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL15001430159",
+          "store": "Ktronix Tunja",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL11001430312",
+          "store": "Ktronix Salitre",
+          "account": "Alkosto",
+          "cupos": 2.0,
+          "presentes": 1,
+          "pct": 50
+        },
+        {
+          "storeCode": "SCOL50001110792",
+          "store": "Cav Bogota Plaza Claro",
+          "account": "CLARO",
+          "cupos": 2.0,
+          "presentes": 1,
+          "pct": 50
+        }
+      ]
+    },
+    {
+      "name": "Romero Mendez Jhon Alexander",
+      "totalCupos": 4.0,
+      "totalPresentes": 4,
+      "pct": 100,
+      "stores": [
+        {
+          "storeCode": "SGSCO091803",
+          "store": "Panamericana Bucaramanga",
+          "account": "Panamericana",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL68001430003",
+          "store": "Alkomprar Electro Bucaramanga",
+          "account": "Alkomprar",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL68547430038",
+          "store": "Alkomprar Piedecuesta",
+          "account": "Alkomprar",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL68001430274",
+          "store": "Alkomprar Bucaramanga",
+          "account": "Alkomprar",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL68001110046",
+          "store": "Cav Bucaramanga Omnicentro",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL68081110049",
+          "store": "Cav Barrancabermeja",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL68001110045",
+          "store": "Cav Bucaramanga Cabecera",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL68001430180",
+          "store": "Falabella Caracoli",
+          "account": "Falabella",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "name": "Santiago Ayala Bahamon",
+      "totalCupos": 8.0,
+      "totalPresentes": 2,
+      "pct": 25,
+      "stores": [
+        {
+          "storeCode": "SCOL76001430203",
+          "store": "Falabella Wtc Cali",
+          "account": "Falabella",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL76001430130",
+          "store": "Ktronix Chipichape",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL17001430293",
+          "store": "Ktronix Manizales",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL76001430010",
+          "store": "Alkomprar Unico",
+          "account": "Alkomprar",
+          "cupos": 0.5,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL76001110051",
+          "store": "Cav Cali Norte",
+          "account": "CLARO",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL66001110087",
+          "store": "Cav Pereira Estacion Central",
+          "account": "CLARO",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL76520110492",
+          "store": "Cav Palmira Centro",
+          "account": "CLARO",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL66001430086",
+          "store": "Alkomprar Pereira",
+          "account": "Alkomprar",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SGSCO032510",
+          "store": "Alkomprar Armenia",
+          "account": "Alkomprar",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL66001430179",
+          "store": "Falabella Av Circunva # 5 - 20 - Pereira",
+          "account": "Falabella",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL17001430299",
+          "store": "Falabella La Carola",
+          "account": "Falabella",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL66001430019",
+          "store": "Alkosto Pereira Av. Americas",
+          "account": "Alkosto",
+          "cupos": 2.0,
+          "presentes": 1,
+          "pct": 50
+        },
+        {
+          "storeCode": "SGSCO085439",
+          "store": "Alkosto Cali Norte",
+          "account": "Alkosto",
+          "cupos": 1.5,
+          "presentes": 1,
+          "pct": 67
+        }
+      ]
+    },
+    {
+      "name": "Sepulveda Camacho Viviana Carolina",
+      "totalCupos": 12.0,
+      "totalPresentes": 7,
+      "pct": 58,
+      "stores": [
+        {
+          "storeCode": "SCOL73001430210",
+          "store": "Falabella Acqua",
+          "account": "Falabella",
+          "cupos": 0.9,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SGSCO080919",
+          "store": "Ktronix Girardot",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SGSCO073963",
+          "store": "Ktronix Fusagasuga",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SGSCO087548",
+          "store": "Ktronix Mall Plaza Nqs",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL73001430085",
+          "store": "Alkomprar Ibague",
+          "account": "Alkomprar",
+          "cupos": 0.1,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL11001430014",
+          "store": "Alkosto Bog Cr 30",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL11001331284",
+          "store": "ALMACEN-19 CENTRO KR 7 CON 18",
+          "account": "Panamericana",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL11001110060",
+          "store": "Cav Bogota Cra 8",
+          "account": "CLARO",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL73001110455",
+          "store": "Cav Ibagué Fontainebleau",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL25290110449",
+          "store": "Cav Fusagasuga T",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL25307110450",
+          "store": "Cav Girardot El Plaza",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL11001110058",
+          "store": "Cav Bogota Calima",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL11001110094",
+          "store": "Cav Bogota Restrepo",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL73001110262",
+          "store": "Cav Ibague Centro",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL11001430303",
+          "store": "Ktronix 20 Julio",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "name": "Tatiana Barragan",
+      "totalCupos": 11.0,
+      "totalPresentes": 8,
+      "pct": 73,
+      "stores": [
+        {
+          "storeCode": "SGSCO091799",
+          "store": "Panamericana Centro Mayor",
+          "account": "Panamericana",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL11001430020",
+          "store": "Alkosto Venecia",
+          "account": "Alkosto",
+          "cupos": 4.0,
+          "presentes": 1,
+          "pct": 25
+        },
+        {
+          "storeCode": "SCOL11001110681",
+          "store": "Ensueño Madelena",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL19290110069",
+          "store": "Cav Florencia",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL41001110082",
+          "store": "Cav Neiva San Pedro",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL11001110105",
+          "store": "Cav Bogota Venecia",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL11001430181",
+          "store": "Falabella Centro Mayor",
+          "account": "Falabella",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL11001110830",
+          "store": "Cav Centro T",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL11001430307",
+          "store": "Ktronix Centro Mayor",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "name": "Uribe Benitez Julian Alberto",
+      "totalCupos": 10.0,
+      "totalPresentes": 7,
+      "pct": 70,
+      "stores": [
+        {
+          "storeCode": "SCOL11001110110",
+          "store": "Cav Titan Plaza",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL11001110212",
+          "store": "Cav Bogota Unicentro",
+          "account": "CLARO",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL11001430200",
+          "store": "Falabella Unicentro",
+          "account": "Falabella",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SGSCO091805",
+          "store": "Panamericana Titan ",
+          "account": "Panamericana",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SGSCO091806",
+          "store": "Panamericana Unicentro Bogota",
+          "account": "Panamericana",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL11001110070",
+          "store": "Cav Bogota Floresta",
+          "account": "CLARO",
+          "cupos": 0.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "SCOL11001430013",
+          "store": "Alkosto Av 68",
+          "account": "Alkosto",
+          "cupos": 4.0,
+          "presentes": 3,
+          "pct": 75
+        },
+        {
+          "storeCode": "SCOL11001430046",
+          "store": "Falabella Colina",
+          "account": "Falabella",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL11001430315",
+          "store": "Ktronix Titan Plaza",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL11001430199",
+          "store": "Falabella Titan",
+          "account": "Falabella",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        },
+        {
+          "storeCode": "SCOL11001430316",
+          "store": "Ktronix Unicentro",
+          "account": "Alkosto",
+          "cupos": 1.0,
+          "presentes": 1,
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "name": "Zamora Melo Leidy Johanna",
+      "totalCupos": 8.0,
+      "totalPresentes": 0,
+      "pct": 0,
+      "stores": [
+        {
+          "storeCode": "c230",
+          "store": "Domic Btá Zf",
+          "account": "CLARO",
+          "cupos": 7.0,
+          "presentes": 0,
+          "pct": 0
+        },
+        {
+          "storeCode": "C200",
+          "store": "Tienda Virtual",
+          "account": "CLARO",
+          "cupos": 1.0,
+          "presentes": 0,
+          "pct": 0
+        }
+      ]
+    }
+  ],
+  "availableDates": [
+    "2025-07-01",
+    "2025-08-01",
+    "2025-09-01",
+    "2025-10-01",
+    "2025-11-01",
+    "2025-12-01",
+    "2026-01-01",
+    "2026-02-01",
+    "2026-03-01",
+    "2026-04-01",
+    "2026-05-01",
+    "2026-06-01"
+  ]
+}

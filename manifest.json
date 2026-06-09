@@ -1,0 +1,22 @@
+{
+  "name": "Asistencia Diaria – Huawei FF",
+  "short_name": "Asistencia FF",
+  "description": "Panel de asistencia diaria para Field Force Huawei Colombia",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#CF0A2C",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
