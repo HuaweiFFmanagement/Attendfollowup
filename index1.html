@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asistencia Diaria – Huawei FF</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#CF0A2C">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Asistencia FF">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #CF0A2C;
+      --red-light: #fff0f2;
+      --green: #1a7f37;
+      --green-light: #eafbee;
+      --amber: #b45309;
+      --amber-light: #fef3c7;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-400: #9ca3af;
+      --gray-600: #4b5563;
+      --gray-800: #1f2937;
+      --radius: 8px;
+      --radius-lg: 12px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      background: var(--red);
+      color: white;
+      padding: 0 1rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+    header h1 {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+    header span {
+      font-size: 11px;
+      opacity: 0.75;
+      margin-left: 8px;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #btn-export {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      font-size: 13px;
+      padding: 5px 12px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 5px;
+    }
+    #btn-export:hover { background: rgba(255,255,255,0.25); }
+    #btn-nuevo {
+      background: white;
+      color: var(--red);
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      display: none;
+    }
+    #btn-nuevo:hover { background: #f5f5f5; }
+
+    /* MAIN */
+    main { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+
+    /* UPLOAD */
+    #upload-section { display: block; }
+    .upload-card {
+      background: white;
+      border: 2px dashed var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 3rem 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      max-width: 480px;
+      margin: 3rem auto 0;
+    }
+    .upload-card:hover, .upload-card.drag { border-color: var(--red); background: var(--red-light); }
+    .upload-card input { display: none; }
+    .upload-icon {
+      width: 56px; height: 56px;
+      background: var(--red-light);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem;
+    }
+    .upload-icon svg { color: var(--red); }
+    .upload-card h2 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+    .upload-card p { font-size: 13px; color: var(--gray-400); }
+    .upload-card .hint {
+      margin-top: 1rem;
+      font-size: 11px;
+      color: var(--gray-400);
+      background: var(--gray-100);
+      padding: 6px 12px;
+      border-radius: 20px;
+      display: inline-block;
+    }
+
+    /* DASHBOARD */
+    #dashboard { display: none; }
+
+    .report-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 1rem;
+    }
+    .report-meta-left { display: flex; flex-direction: column; gap: 2px; }
+    .report-meta-left strong { font-size: 15px; }
+    .report-meta-left span { font-size: 12px; color: var(--gray-400); }
+
+    /* STAT CARDS */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 1.25rem; }
+    .stat {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+    }
+    .stat-label { font-size: 11px; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+    .stat-val { font-size: 28px; font-weight: 700; line-height: 1; }
+    .stat-val.green { color: var(--green); }
+    .stat-val.red { color: var(--red); }
+    .stat-val.amber { color: var(--amber); }
+    .stat-sub { font-size: 11px; color: var(--gray-400); margin-top: 3px; }
+
+    /* CONTROLS */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 1rem;
+    }
+    .controls select, .controls input {
+      font-size: 13px;
+      padding: 7px 10px;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      background: white;
+      color: var(--gray-800);
+      outline: none;
+    }
+    .controls select:focus, .controls input:focus { border-color: var(--red); }
+    .controls input { flex: 1; min-width: 180px; }
+
+    /* ABSENT HIGHLIGHT */
+    .absent-banner {
+      background: var(--red-light);
+      border: 1px solid #fecdd3;
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #9f1239;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .absent-banner strong { font-weight: 600; }
+
+    /* TABLE */
+    .table-summary { font-size: 12px; color: var(--gray-400); margin-bottom: 6px; }
+    .table-wrap {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      overflow-x: auto;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th {
+      text-align: left;
+      padding: 9px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-200);
+      white-space: nowrap;
+    }
+    td { padding: 8px 12px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--gray-50); }
+    tr.absent td { background: #fff5f5; }
+    tr.absent:hover td { background: #ffecec; }
+
+    .name-cell { font-weight: 500; }
+    .store-cell { max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--gray-600); }
+    .time-cell { text-align: right; color: var(--gray-600); font-size: 12px; }
+    .checkin-cell { font-size: 12px; color: var(--gray-600); white-space: nowrap; }
+
+    /* CHIPS */
+    .chip {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .chip-normal { background: var(--green-light); color: var(--green); }
+    .chip-abnormal { background: var(--amber-light); color: var(--amber); }
+    .chip-absent { background: var(--red-light); color: var(--red); }
+    .chip-role { background: var(--gray-100); color: var(--gray-600); }
+
+    /* EMPTY */
+    .empty { text-align: center; padding: 3rem 1rem; color: var(--gray-400); }
+    .empty svg { display: block; margin: 0 auto .75rem; opacity: .4; }
+
+    /* UPDATE BANNER */
+    #update-banner {
+      display: none;
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gray-800);
+      color: white;
+      font-size: 13px;
+      padding: 10px 18px;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 999;
+      gap: 10px;
+      align-items: center;
+    }
+    #update-banner button {
+      background: white;
+      color: var(--gray-800);
+      border: none;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 14px; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .stat-val { font-size: 22px; }
+      main { padding: 1rem .75rem 4rem; }
+      th:nth-child(4), td:nth-child(4),
+      th:nth-child(7), td:nth-child(7) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Asistencia Diaria <span>Huawei FF</span></h1>
+  </div>
+  <div class="header-right">
+    <button id="btn-export" onclick="exportCSV()">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Exportar CSV
+    </button>
+    <button id="btn-nuevo" onclick="resetApp()">Nuevo archivo</button>
+  </div>
+</header>
+
+<main>
+  <!-- UPLOAD -->
+  <div id="upload-section">
+    <div class="upload-card" id="drop-zone" onclick="document.getElementById('fileInput').click()">
+      <div class="upload-icon">
+        <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+      </div>
+      <h2>Sube el archivo de asistencia</h2>
+      <p>Arrastra aquí el Excel descargado de iRetail</p>
+      <p class="hint">SwipeCardDailyRecords.xlsx</p>
+      <input type="file" id="fileInput" accept=".xlsx,.xls">
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard">
+    <div class="report-meta">
+      <div class="report-meta-left">
+        <strong id="report-date">—</strong>
+        <span id="report-file">—</span>
+      </div>
+    </div>
+
+    <div class="stats" id="stat-cards"></div>
+
+    <div id="absent-banner" class="absent-banner"></div>
+
+    <div class="controls">
+      <select id="filter-date" onchange="render()">
+        <option value="">Todas las fechas</option>
+      </select>
+      <select id="filter-duty" onchange="render()">
+        <option value="">Todos los roles</option>
+        <option value="Superviosr">Supervisor</option>
+        <option value="Promoter">Promoter</option>
+        <option value="Non-HW Promoter">Non-HW Promoter</option>
+      </select>
+      <select id="filter-status" onchange="render()">
+        <option value="">Todos los estados</option>
+        <option value="present">Presentes</option>
+        <option value="absent">Ausentes / Sin check-in</option>
+        <option value="Normal">Check-in Normal</option>
+        <option value="Abnormal">Check-in Anormal</option>
+      </select>
+      <select id="filter-city" onchange="render()">
+        <option value="">Todas las ciudades</option>
+      </select>
+      <input type="text" id="search" placeholder="Buscar nombre o tienda…" oninput="render()">
+    </div>
+
+    <p class="table-summary" id="table-summary"></p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Rol</th>
+            <th>Tienda</th>
+            <th>Ciudad</th>
+            <th>Primer check-in</th>
+            <th>Estado</th>
+            <th>Tiempo (min)</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+      <div class="empty" id="empty-state" style="display:none">
+        <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5-2 4-2 4 2 4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        Sin resultados para ese filtro
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="update-banner">
+  <span>Nueva versión disponible</span>
+  <button onclick="location.reload()">Actualizar</button>
+</div>
+
+<script>
+let allRows = [];
+
+// ── FILE INPUT ──────────────────────────────────────────────
+document.getElementById('fileInput').addEventListener('change', e => {
+  const f = e.target.files[0];
+  if (f) readFile(f);
+});
+
+const drop = document.getElementById('drop-zone');
+drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('drag'); });
+drop.addEventListener('dragleave', () => drop.classList.remove('drag'));
+drop.addEventListener('drop', e => {
+  e.preventDefault();
+  drop.classList.remove('drag');
+  const f = e.dataTransfer.files[0];
+  if (f) readFile(f);
+});
+
+function readFile(file) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const wb = XLSX.read(ev.target.result, { type: 'array' });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const raw = XLSX.utils.sheet_to_json(ws, { defval: '' });
+    processData(raw, file.name);
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+// ── PROCESS ─────────────────────────────────────────────────
+function excelDateToStr(val) {
+  if (!val) return '';
+  if (typeof val === 'string') return val.substring(0, 16);
+  if (typeof val === 'number') {
+    const d = new Date(Math.round((val - 25569) * 86400 * 1000));
+    return d.toISOString().replace('T', ' ').substring(0, 16);
+  }
+  return String(val).substring(0, 16);
+}
+
+function cleanName(n) {
+  if (!n) return '';
+  const parts = String(n).trim().split(' ');
+  if (parts[0] && /^\d+$/.test(parts[0])) parts.shift();
+  return parts.join(' ');
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  const [y, m, day] = d.split('-');
+  const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  return `${parseInt(day)} ${months[parseInt(m) - 1]} ${y}`;
+}
+
+function processData(raw, filename) {
+  allRows = raw.map(r => {
+    const checkin = r['First Check In'] || r['First Check in'] || '';
+    const statusIn = r['Status'] || '';
+    const time = r['Time in store(Mins)'];
+    const isPresent = checkin !== '' && checkin !== undefined;
+    return {
+      name: cleanName(r['Name'] || ''),
+      duty: r['Duty'] || '',
+      storeName: r['Store Name'] || '',
+      city: r['City'] || '',
+      date: r['Date'] ? excelDateToStr(r['Date']).substring(0, 10) : '',
+      firstCheckin: excelDateToStr(checkin),
+      status: statusIn,
+      timeInStore: (time !== '' && time !== undefined && time !== null) ? Math.round(Number(time)) : '',
+      isPresent
+    };
+  });
+
+  // Cities
+  const cities = [...new Set(allRows.map(r => r.city).filter(Boolean))].sort();
+  const cs = document.getElementById('filter-city');
+  cs.innerHTML = '<option value="">Todas las ciudades</option>';
+  cities.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; cs.appendChild(o); });
+
+  // Dates
+  const dates = [...new Set(allRows.map(r => r.date).filter(Boolean))].sort().reverse();
+  const ds = document.getElementById('filter-date');
+  ds.innerHTML = '<option value="">Todas las fechas</option>';
+  dates.forEach((d, i) => {
+    const o = document.createElement('option');
+    o.value = d;
+    o.textContent = formatDate(d);
+    if (i === 0) o.selected = true;
+    ds.appendChild(o);
+  });
+
+  const date = dates[0] || '';
+  document.getElementById('report-date').textContent = date ? formatDate(date) : 'Fecha desconocida';
+  document.getElementById('report-file').textContent = filename;
+
+  document.getElementById('upload-section').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  document.getElementById('btn-export').style.display = 'flex';
+  document.getElementById('btn-nuevo').style.display = 'block';
+
+  render();
+}
+
+// ── RENDER ───────────────────────────────────────────────────
+function getFiltered() {
+  const dateF = document.getElementById('filter-date').value;
+  const dutyF = document.getElementById('filter-duty').value;
+  const statusF = document.getElementById('filter-status').value;
+  const cityF = document.getElementById('filter-city').value;
+  const searchF = document.getElementById('search').value.toLowerCase();
+  return allRows.filter(r => {
+    if (dateF && r.date !== dateF) return false;
+    if (dutyF && r.duty !== dutyF) return false;
+    if (cityF && r.city !== cityF) return false;
+    if (searchF && !r.name.toLowerCase().includes(searchF) && !r.storeName.toLowerCase().includes(searchF)) return false;
+    if (statusF === 'present' && !r.isPresent) return false;
+    if (statusF === 'absent' && r.isPresent) return false;
+    if (statusF === 'Normal' && r.status !== 'Normal') return false;
+    if (statusF === 'Abnormal' && r.status !== 'Abnormal') return false;
+    return true;
+  });
+}
+
+function render() {
+  const dateF = document.getElementById('filter-date').value;
+  const dutyF = document.getElementById('filter-duty').value;
+  const cityF = document.getElementById('filter-city').value;
+
+  // Update report date label when date filter changes
+  if (dateF) document.getElementById('report-date').textContent = formatDate(dateF);
+
+  // Stats on role/city/date filtered base
+  const base = allRows.filter(r => {
+    if (dateF && r.date !== dateF) return false;
+    if (dutyF && r.duty !== dutyF) return false;
+    if (cityF && r.city !== cityF) return false;
+    return true;
+  });
+  const total = base.length;
+  const presentes = base.filter(r => r.isPresent).length;
+  const ausentes = total - presentes;
+  const anormales = base.filter(r => r.isPresent && r.status === 'Abnormal').length;
+  const pct = total ? Math.round(presentes / total * 100) : 0;
+
+  document.getElementById('stat-cards').innerHTML = `
+    <div class="stat"><div class="stat-label">Total</div><div class="stat-val">${total}</div><div class="stat-sub">registros</div></div>
+    <div class="stat"><div class="stat-label">Presentes</div><div class="stat-val green">${presentes}</div><div class="stat-sub">con check-in</div></div>
+    <div class="stat"><div class="stat-label">Ausentes</div><div class="stat-val red">${ausentes}</div><div class="stat-sub">sin check-in</div></div>
+    <div class="stat"><div class="stat-label">Anormales</div><div class="stat-val amber">${anormales}</div><div class="stat-sub">check-in irregular</div></div>
+    <div class="stat"><div class="stat-label">Cobertura</div><div class="stat-val ${pct >= 80 ? 'green' : pct >= 60 ? 'amber' : 'red'}">${pct}%</div><div class="stat-sub">del total</div></div>
+  `;
+
+  // Absent banner
+  const absentNames = base.filter(r => !r.isPresent).map(r => r.name);
+  const banner = document.getElementById('absent-banner');
+  if (absentNames.length > 0) {
+    banner.style.display = 'block';
+    banner.innerHTML = `<strong>⚠ Sin check-in (${absentNames.length}):</strong> ${absentNames.join(' · ')}`;
+  } else {
+    banner.style.display = 'none';
+  }
+
+  // Table
+  const filtered = getFiltered();
+  const tbody = document.getElementById('table-body');
+  const empty = document.getElementById('empty-state');
+  tbody.innerHTML = '';
+
+  if (filtered.length === 0) {
+    empty.style.display = 'block';
+    document.getElementById('table-summary').textContent = '';
+  } else {
+    empty.style.display = 'none';
+    document.getElementById('table-summary').textContent = `Mostrando ${filtered.length} registro${filtered.length !== 1 ? 's' : ''}`;
+    filtered.forEach(r => {
+      const tr = document.createElement('tr');
+      if (!r.isPresent) tr.className = 'absent';
+      let chip = '';
+      if (!r.isPresent) chip = '<span class="chip chip-absent">Ausente</span>';
+      else if (r.status === 'Abnormal') chip = '<span class="chip chip-abnormal">Anormal</span>';
+      else chip = '<span class="chip chip-normal">Normal</span>';
+      const role = r.duty === 'Superviosr' ? 'Supervisor' : r.duty;
+      tr.innerHTML = `
+        <td class="name-cell">${r.name}</td>
+        <td><span class="chip chip-role">${role}</span></td>
+        <td class="store-cell" title="${r.storeName}">${r.storeName}</td>
+        <td>${r.city || '—'}</td>
+        <td class="checkin-cell">${r.firstCheckin || '—'}</td>
+        <td>${chip}</td>
+        <td class="time-cell">${r.timeInStore !== '' ? r.timeInStore : '—'}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+}
+
+// ── EXPORT ───────────────────────────────────────────────────
+function exportCSV() {
+  const filtered = getFiltered();
+  const headers = ['Nombre','Rol','Tienda','Ciudad','Fecha','Primer Check-in','Estado','Tiempo (min)'];
+  const rows = filtered.map(r => [
+    r.name,
+    r.duty === 'Superviosr' ? 'Supervisor' : r.duty,
+    r.storeName, r.city, r.date,
+    r.firstCheckin || '',
+    r.isPresent ? r.status : 'Ausente',
+    r.timeInStore
+  ]);
+  const csv = [headers, ...rows].map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+  const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'asistencia_diaria.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── RESET ────────────────────────────────────────────────────
+function resetApp() {
+  allRows = [];
+  document.getElementById('fileInput').value = '';
+  document.getElementById('upload-section').style.display = 'block';
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('btn-export').style.display = 'none';
+  document.getElementById('btn-nuevo').style.display = 'none';
+  ['filter-date','filter-duty','filter-status','filter-city'].forEach(id => document.getElementById(id).selectedIndex = 0);
+  document.getElementById('search').value = '';
+}
+
+// ── SERVICE WORKER ───────────────────────────────────────────
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').then(reg => {
+    reg.addEventListener('updatefound', () => {
+      const nw = reg.installing;
+      nw.addEventListener('statechange', () => {
+        if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+          document.getElementById('update-banner').style.display = 'flex';
+        }
+      });
+    });
+  });
+}
+</script>
+</body>
+</html>
