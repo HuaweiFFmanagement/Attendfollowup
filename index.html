@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asistencia Diaria – Huawei FF</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#CF0A2C">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #CF0A2C; --red-light: #fff0f2; --red-mid: #fecdd3;
+      --green: #1a7f37; --green-light: #eafbee;
+      --amber: #b45309; --amber-light: #fef3c7;
+      --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
+      --gray-400: #9ca3af; --gray-600: #4b5563; --gray-800: #1f2937;
+      --radius: 8px; --radius-lg: 12px;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--gray-50); color: var(--gray-800); min-height: 100vh; }
+    header { background: var(--red); color: white; padding: 0 1rem; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 4px rgba(0,0,0,.15); }
+    header h1 { font-size: 15px; font-weight: 600; }
+    .hdr-right { display: flex; gap: 8px; align-items: center; }
+    .btn-ghost { background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3); color: white; font-size: 12px; padding: 5px 12px; border-radius: var(--radius); cursor: pointer; display:none; }
+    .btn-ghost:hover { background: rgba(255,255,255,.25); }
+    .btn-white { background: white; color: var(--red); border: none; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: var(--radius); cursor: pointer; display:none; }
+    main { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1rem 5rem; }
+
+    /* UPLOAD */
+    #upload-view { display: block; }
+    .upload-center { max-width: 420px; margin: 3rem auto 0; }
+    .upload-card { background: white; border: 2px dashed var(--gray-200); border-radius: var(--radius-lg); padding: 2.5rem 2rem; text-align: center; cursor: pointer; transition: border-color .2s, background .2s; }
+    .upload-card:hover, .upload-card.drag { border-color: var(--red); background: var(--red-light); }
+    .upload-card input { display: none; }
+    .upload-icon { width: 52px; height: 52px; background: var(--red-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto .85rem; }
+    .upload-icon svg { color: var(--red); }
+    .upload-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .upload-card p { font-size: 13px; color: var(--gray-400); }
+    .cov-badge { display: inline-flex; align-items: center; gap: 5px; margin-top: 1rem; font-size: 11px; color: var(--green); background: var(--green-light); padding: 4px 12px; border-radius: 20px; font-weight: 500; }
+
+    /* DASHBOARD */
+    #dash-view { display: none; }
+    .meta-bar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 1rem; }
+    .meta-left strong { font-size: 15px; display: block; }
+    .meta-left span { font-size: 12px; color: var(--gray-400); }
+    .meta-right { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    select.ctrl { font-size: 13px; padding: 6px 10px; border: 1px solid var(--gray-200); border-radius: var(--radius); background: white; color: var(--gray-800); }
+
+    /* STATS */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 1.25rem; }
+    .stat { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: .9rem 1rem; }
+    .stat-label { font-size: 10px; color: var(--gray-400); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; }
+    .stat-val { font-size: 24px; font-weight: 700; line-height: 1; }
+    .stat-val.green { color: var(--green); }
+    .stat-val.red { color: var(--red); }
+    .stat-val.amber { color: var(--amber); }
+    .stat-sub { font-size: 11px; color: var(--gray-400); margin-top: 3px; }
+
+    /* TABS */
+    .tabs { display: flex; gap: 0; margin-bottom: 1rem; border-bottom: 1px solid var(--gray-200); }
+    .tab { font-size: 13px; font-weight: 500; padding: 8px 18px; border: none; background: none; color: var(--gray-400); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+    .tab.active { color: var(--red); border-bottom-color: var(--red); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* SPV GRID */
+    .spv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(285px, 1fr)); gap: 12px; }
+    .spv-card { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 1rem 1.2rem; cursor: pointer; transition: box-shadow .15s, border-color .15s; }
+    .spv-card:hover { border-color: var(--red); box-shadow: 0 2px 8px rgba(207,10,44,.08); }
+    .spv-card.active { border-color: var(--red); background: var(--red-light); }
+    .spv-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: .55rem; }
+    .spv-name { font-size: 13px; font-weight: 600; line-height: 1.3; }
+    .spv-pct { font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 20px; white-space: nowrap; }
+    .pct-g { background: var(--green-light); color: var(--green); }
+    .pct-a { background: var(--amber-light); color: var(--amber); }
+    .pct-r { background: var(--red-light); color: var(--red); }
+    .spv-bar-track { background: var(--gray-100); border-radius: 4px; height: 5px; overflow: hidden; margin-bottom: 6px; }
+    .spv-bar-fill { height: 100%; border-radius: 4px; }
+    .spv-nums { display: flex; justify-content: space-between; font-size: 11px; color: var(--gray-400); }
+
+    /* DETAIL */
+    #detail-panel { display: none; background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1.25rem; }
+    .detail-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .detail-title { font-size: 14px; font-weight: 600; }
+    .btn-close { background: none; border: none; font-size: 20px; color: var(--gray-400); cursor: pointer; line-height: 1; }
+    .chart-scroll { overflow-x: auto; margin-bottom: 1rem; }
+
+    /* TABLES */
+    .tbl-wrap { border: 1px solid var(--gray-200); border-radius: var(--radius); overflow: hidden; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: .05em; background: var(--gray-50); border-bottom: 1px solid var(--gray-200); white-space: nowrap; }
+    td { padding: 7px 12px; border-bottom: 1px solid var(--gray-100); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--gray-50); }
+    tr.row-zero td { background: #fff5f5; }
+    tr.row-absent td { background: #fff5f5; }
+    .mini-bar { display: flex; align-items: center; gap: 6px; }
+    .mini-track { flex: 1; height: 5px; background: var(--gray-100); border-radius: 3px; min-width: 50px; overflow: hidden; }
+    .mini-fill { height: 100%; border-radius: 3px; }
+    .chip { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 20px; }
+    .chip-ok { background: var(--green-light); color: var(--green); }
+    .chip-warn { background: var(--amber-light); color: var(--amber); }
+    .chip-bad { background: var(--red-light); color: var(--red); }
+    .chip-gray { background: var(--gray-100); color: var(--gray-600); }
+
+    /* PROMOTER CONTROLS */
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; }
+    .controls select, .controls input { font-size: 13px; padding: 7px 10px; border: 1px solid var(--gray-200); border-radius: var(--radius); background: white; color: var(--gray-800); }
+    .controls input { flex: 1; min-width: 160px; }
+    .absent-banner { background: var(--red-light); border: 1px solid var(--red-mid); border-radius: var(--radius); padding: 10px 14px; font-size: 13px; color: #9f1239; margin-bottom: 1rem; display: none; }
+    .tbl-summary { font-size: 12px; color: var(--gray-400); margin-bottom: 6px; }
+    .empty { text-align: center; padding: 2.5rem 1rem; color: var(--gray-400); font-size: 13px; }
+
+    #update-banner { display: none; position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); background: var(--gray-800); color: white; font-size: 13px; padding: 10px 18px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,.2); z-index: 999; gap: 10px; align-items: center; }
+    #update-banner button { background: white; color: var(--gray-800); border: none; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 12px; cursor: pointer; }
+
+    @media (max-width: 600px) {
+      .stats { grid-template-columns: repeat(2,1fr); }
+      .spv-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Asistencia & Cobertura <span style="opacity:.7;font-weight:400">· Huawei FF</span></h1>
+  <div class="hdr-right">
+    <button class="btn-ghost" id="btn-export" onclick="exportCSV()">↓ Exportar</button>
+    <button class="btn-white" id="btn-reset" onclick="resetApp()">Nuevo archivo</button>
+  </div>
+</header>
+
+<main>
+  <!-- UPLOAD: solo SwipeCard -->
+  <div id="upload-view">
+    <div class="upload-center">
+      <div class="upload-card" id="drop-zone" onclick="document.getElementById('swipeInput').click()">
+        <div class="upload-icon">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>Sube el SwipeCard del día</h3>
+        <p>SwipeCardDailyRecords.xlsx</p>
+        <div class="cov-badge">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          Cobertura Junio 2026 integrada
+        </div>
+        <input type="file" id="swipeInput" accept=".xlsx,.xls">
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dash-view">
+    <div class="meta-bar">
+      <div class="meta-left">
+        <strong id="meta-date">—</strong>
+        <span id="meta-file">—</span>
+      </div>
+      <div class="meta-right">
+        <select class="ctrl" id="date-filter" onchange="applyDateFilter()"></select>
+      </div>
+    </div>
+
+    <div class="stats" id="global-stats"></div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('cobertura',this)">Cobertura por supervisor</button>
+      <button class="tab" onclick="switchTab('promotores',this)">Detalle promotores</button>
+    </div>
+
+    <!-- TAB COBERTURA -->
+    <div class="tab-content active" id="tab-cobertura">
+      <div id="detail-panel">
+        <div class="detail-hdr">
+          <span class="detail-title" id="detail-title">—</span>
+          <button class="btn-close" onclick="closeDetail()">✕</button>
+        </div>
+        <div class="chart-scroll"><svg id="chart-svg" style="display:block"></svg></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Tienda</th><th>Cadena</th><th>Cupos</th><th>Presentes</th><th>Ausentes</th><th>Cobertura</th></tr></thead>
+            <tbody id="detail-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="spv-grid" id="spv-grid"></div>
+    </div>
+
+    <!-- TAB PROMOTORES -->
+    <div class="tab-content" id="tab-promotores">
+      <div class="controls">
+        <select id="f-spv" onchange="renderPromoters()"><option value="">Todos los supervisores</option></select>
+        <select id="f-status" onchange="renderPromoters()">
+          <option value="">Todos los estados</option>
+          <option value="present">Presentes</option>
+          <option value="absent">Ausentes</option>
+          <option value="Normal">Check-in Normal</option>
+          <option value="Abnormal">Check-in Anormal</option>
+        </select>
+        <select id="f-city" onchange="renderPromoters()"><option value="">Todas las ciudades</option></select>
+        <input type="text" id="f-search" placeholder="Buscar nombre o tienda…" oninput="renderPromoters()">
+      </div>
+      <div class="absent-banner" id="absent-banner"></div>
+      <p class="tbl-summary" id="tbl-summary"></p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Nombre</th><th>Supervisor</th><th>Tienda</th><th>Ciudad</th><th>Check-in</th><th>Estado</th><th>Min</th></tr></thead>
+          <tbody id="promoter-tbody"></tbody>
+        </table>
+        <div class="empty" id="promoter-empty" style="display:none">Sin resultados</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="update-banner"><span>Nueva versión disponible</span><button onclick="location.reload()">Actualizar</button></div>
+
+<script>
+// ── COVERAGE EMBEBIDA ─────────────────────────────────────────
+const COVERAGE = {"reportDate": "2026-06-01", "month": "Junio 2026", "stores": [{"storeCode": "SCOL73001110455", "store": "Cav Ibagué Fontainebleau", "account": "CLARO", "supervisor": "Sepulveda Camacho Viviana Carolina", "cupos": 1.0}, {"storeCode": "SCOL76147110033", "store": "Cav Cartago", "account": "CLARO", "supervisor": "Mahecha De La Portilla Juan David", "cupos": 1.0}, {"storeCode": "SCOL25290110449", "store": "Cav Fusagasuga T", "account": "CLARO", "supervisor": "Sepulveda Camacho Viviana Carolina", "cupos": 1.0}, {"storeCode": "SCOL25307110450", "store": "Cav Girardot El Plaza", "account": "CLARO", "supervisor": "Sepulveda Camacho Viviana Carolina", "cupos": 1.0}, {"storeCode": "SCOL05266110682", "store": "Cav Medellin Sao Paulo", "account": "CLARO", "supervisor": "Estevez Perez Sneider", "cupos": 1.0}, {"storeCode": "SCOL11001110100", "store": "Cav Bogota Toberin", "account": "CLARO", "supervisor": "Aconcha Moreno Oscar Alberto", "cupos": 0.0}, {"storeCode": "SCOL11001430033", "store": "Falabella Plaza Central", "account": "Falabella", "supervisor": "Romero Herrera Manuel Fernando", "cupos": 0.5}, {"storeCode": "SCOL05001110458", "store": "Cav Mayorca", "account": "CLARO", "supervisor": "Estevez Perez Sneider", "cupos": 0.0}, {"storeCode": "SCOL11001430188", "store": "Falabella Galerias", "account": "Falabella", "supervisor": "Aconcha Moreno Oscar Alberto", "cupos": 0.5}, {"storeCode": "SCOL05001430314", "store": "Ktronix Tesoro", "account": "Alkosto", "supervisor": "Estevez Perez Sneider", "cupos": 1.0}, {"storeCode": "SCOL68001110046", "store": "Cav Bucaramanga Omnicentro", "account": "CLARO", "supervisor": "Romero Mendez Jhon Alexander", "cupos": 1.0}, {"storeCode": "SCOL17380110030", "store": "Cav La Dorada", "account": "CLARO", "supervisor": "Cedeño Cordoba Ruben Alejandro", "cupos": 1.0}, {"storeCode": "SCOL50001110784", "store": "Cav La Felicidad Bogota", "account": "CLARO", "supervisor": "Cedeño Cordoba Ruben Alejandro", "cupos": 0.0}, {"storeCode": "SCOL11001430189", "store": "Falabella Hayuelos Cl 20", "account": "Falabella", "supervisor": "Romero Herrera Manuel Fernando", "cupos": 0.5}, {"storeCode": "SCOL11001110681", "store": "Ensueño Madelena", "account": "CLARO", "supervisor": "Tatiana Barragan", "cupos": 1.0}, {"storeCode": "SCOL11001110058", "store": "Cav Bogota Calima", "account": "CLARO", "supervisor": "Sepulveda Camacho Viviana Carolina", "cupos": 1.0}, {"storeCode": "SCOL68081110049", "store": "Cav Barrancabermeja", "account": "CLARO", "supervisor": "Romero Mendez Jhon Alexander", "cupos": 1.0}, {"storeCode": "SCOL68001110045", "store": "Cav Bucaramanga Cabecera", "account": "CLARO", "supervisor": "Romero Mendez Jhon Alexander", "cupos": 1.0}, {"storeCode": "SCOL19001110089", "store": "Cav Popayan Plaza Colonial", "account": "CLARO", "supervisor": "Mahecha De La Portilla Juan David", "cupos": 1.0}, {"storeCode": "SCOL11001430194", "store": "Falabella Plaza Imperial", "account": "Falabella", "supervisor": "Aconcha Moreno Oscar Alberto", "cupos": 0.5}, {"storeCode": "SCOL05001430311", "store": "Ktronix Poblado", "account": "Alkosto", "supervisor": "Estevez Perez Sneider", "cupos": 1.0}, {"storeCode": "SGSCO027718", "store": "Ktronix Arkadia", "account": "Alkosto", "supervisor": "Estevez Perez Sneider", "cupos": 1.0}, {"storeCode": "SCOL25473110488", "store": "Cav Mosquera T", "account": "CLARO", "supervisor": "Cedeño Cordoba Ruben Alejandro", "cupos": 1.0}, {"storeCode": "SCOL19290110069", "store": "Cav Florencia", "account": "CLARO", "supervisor": "Tatiana Barragan", "cupos": 1.0}, {"storeCode": "SCOL11001110110", "store": "Cav Titan Plaza", "account": "CLARO", "supervisor": "Uribe Benitez Julian Alberto", "cupos": 1.0}, {"storeCode": "SCOL76001430203", "store": "Falabella Wtc Cali", "account": "Falabella", "supervisor": "Santiago Ayala Bahamon", "cupos": 1.0}, {"storeCode": "SCOL11001110037", "store": "Cav Plaza De Las Américas", "account": "CLARO", "supervisor": "Diaz Hernandez Ingrid Kimberly", "cupos": 1.0}, {"storeCode": "SCOL47001110097", "store": "Cav Santa Marta Buenavista", "account": "CLARO", "supervisor": "Bermúdez Sariel Renzo Rafael", "cupos": 1.0}, {"storeCode": "SCOL11001110212", "store": "Cav Bogota Unicentro", "account": "CLARO", "supervisor": "Uribe Benitez Julian Alberto", "cupos": 0.0}, {"storeCode": "SCOL13001430187", "store": "Falabella El Castillo", "account": "Falabella", "supervisor": "Bermúdez Sariel Renzo Rafael", "cupos": 1.0}, {"storeCode": "SCOL73001430210", "store": "Falabella Acqua", "account": "Falabella", "supervisor": "Sepulveda Camacho Viviana Carolina", "cupos": 0.9}, {"storeCode": "SCOL11001430200", "store": "Falabella Unicentro", "account": "Falabella", "supervisor": "Uribe Benitez Julian Alberto", "cupos": 1.0}, {"storeCode": "SCOL05001110077", "store": "Cav Medellin Molinos", "account": "CLARO", "supervisor": "García Arana Brayan Steven", "cupos": 1.0}, {"storeCode": "SGSCO080919", "store": "Ktronix Girardot", "account": "Alkosto", "supervisor": "Sepulveda Camacho Viviana Carolina", "cupos": 1.0}, {"storeCode": "SCOL76001430572", "store": "Falabella Jardin Plaza", "account": "Falabella", "supervisor": "Mahecha De La Portilla Juan David", "cupos": 1.0}, {"storeCode": "SCOL68001430180", "store": "Falabella Caracoli", "account": "Falabella", "supervisor": "Romero Mendez Jhon Alexander", "cupos": 1.0}, {"storeCode": "SCOL15001110102", "store": "Cav Tunja La Sexta", "account": "CLARO", "supervisor": "Romero Herrera Manuel Fernando", "cupos": 1.0}, {"storeCode": "SGSCO073963", "store": "Ktronix Fusagasuga", "account": "Alkosto", "supervisor": "Sepulveda Camacho Viviana Carolina", "cupos": 1.0}, {"storeCode": "SCOL11001430046", "store": "Falabella Colina", "account": "Falabella", "supervisor": "Uribe Benitez Julian Alberto", "cupos": 1.0}, {"storeCode": "SCOL54001430393", "store": "Alkomprar Cucuta", "account": "Alkomprar", "supervisor": "Angie Rocio Calderon Arenis", "cupos": 0.0}, {"storeCode": "SCOL11001110094", "store": "Cav Bogota Restrepo", "account": "CLARO", "supervisor": "Sepulveda Camacho Viviana Carolina", "cupos": 1.0}, {"storeCode": "SCOL13001110613", "store": "Cav Cartagena Ejecutivos", "account": "CLARO", "supervisor": "Bermúdez Sariel Renzo Rafael", "cupos": 1.0}, {"storeCode": "SCOL05001430195", "store": "Falabella San Diego", "account": "Falabella", "supervisor": "García Arana Brayan Steven", "cupos": 1.0}, {"storeCode": "SCOL85001110107", "store": "Cav Yopal", "account": "CLARO", "supervisor": "Diaz Hernandez Ingrid Kimberly", "cupos": 1.0}, {"storeCode": "SCOL05088110092", "store": "Cav Medellin Puerta Del Norte", "account": "CLARO", "supervisor": "García Arana Brayan Steven", "cupos": 1.0}, {"storeCode": "SCOL11001110112", "store": "Bosa Gran Plaza", "account": "CLARO", "supervisor": "Diaz Hernandez Ingrid Kimberly", "cupos": 1.0}, {"storeCode": "SCOL11001110071", "store": "Cav Bogota Fontibon", "account": "CLARO", "supervisor": "Cedeño Cordoba Ruben Alejandro", "cupos": 1.0}, {"storeCode": "SCOL11001430196", "store": "Falabella Santa Fe Bog", "account": "Falabella", "supervisor": "Aconcha Moreno Oscar Alberto", "cupos": 1.0}, {"storeCode": "SCOL05001430197", "store": "Falabella Santafe Med", "account": "Falabella", "supervisor": "Estevez Perez Sneider", "cupos": 1.0}, {"storeCode": "SCOL73001110262", "store": "Cav Ibague Centro", "account": "CLARO", "supervisor": "Sepulveda Camacho Viviana Carolina", "cupos": 1.0}, {"storeCode": "SCOL25175430571", "store": "Falabella Fontanar", "account": "Falabella", "supervisor": "Aconcha Moreno Oscar Alberto", "cupos": 1.0}, {"storeCode": "SGSCO087548", "store": "Ktronix Mall Plaza Nqs", "account": "Alkosto", "supervisor": "Sepulveda Camacho Viviana Carolina", "cupos": 1.0}, {"storeCode": "SCOL11001430315", "store": "Ktronix Titan Plaza", "account": "Alkosto", "supervisor": "Uribe Benitez Julian Alberto", "cupos": 1.0}, {"storeCode": "SCOL11001430199", "store": "Falabella Titan", "account": "Falabella", "supervisor": "Uribe Benitez Julian Alberto", "cupos": 1.0}, {"storeCode": "SCOL05001110080", "store": "Cav Medellin Av Colombia", "account": "CLARO", "supervisor": "García Arana Brayan Steven", "cupos": 1.0}, {"storeCode": "SCOL05001430007", "store": "Alkomprar Molinos", "account": "Alkomprar", "supervisor": "García Arana Brayan Steven", "cupos": 0.0}, {"storeCode": "SCOL41001110082", "store": "Cav Neiva San Pedro", "account": "CLARO", "supervisor": "Tatiana Barragan", "cupos": 1.0}, {"storeCode": "SCOL11001110105", "store": "Cav Bogota Venecia", "account": "CLARO", "supervisor": "Tatiana Barragan", "cupos": 1.0}, {"storeCode": "SCOL11001110076", "store": "Cav Bogota Kennedy", "account": "CLARO", "supervisor": "Diaz Hernandez Ingrid Kimberly", "cupos": 1.0}, {"storeCode": "SCOL11001430316", "store": "Ktronix Unicentro", "account": "Alkosto", "supervisor": "Uribe Benitez Julian Alberto", "cupos": 1.0}, {"storeCode": "SCOL11001430181", "store": "Falabella Centro Mayor", "account": "Falabella", "supervisor": "Tatiana Barragan", "cupos": 1.0}, {"storeCode": "SGSCO082615", "store": "Ktronix Barranquilla", "account": "Alkosto", "supervisor": "Bermúdez Sariel Renzo Rafael", "cupos": 1.0}, {"storeCode": "SCOL11001110824", "store": "Cav Plaza Imperial T", "account": "CLARO", "supervisor": "Aconcha Moreno Oscar Alberto", "cupos": 1.0}, {"storeCode": "SCOL11001110041", "store": "Cav Bogota Alamos", "account": "CLARO", "supervisor": "Cedeño Cordoba Ruben Alejandro", "cupos": 1.0}, {"storeCode": "SCOL73001430085", "store": "Alkomprar Ibague", "account": "Alkomprar", "supervisor": "Sepulveda Camacho Viviana Carolina", "cupos": 0.1}, {"storeCode": "SCOL11001110830", "store": "Cav Centro T", "account": "CLARO", "supervisor": "Tatiana Barragan", "cupos": 1.0}, {"storeCode": "SCOL68001430304", "store": "Ktronix Bucaramanga", "account": "Alkosto", "supervisor": "Angie Rocio Calderon Arenis", "cupos": 1.0}, {"storeCode": "SCOL76001430130", "store": "Ktronix Chipichape", "account": "Alkosto", "supervisor": "Santiago Ayala Bahamon", "cupos": 1.0}, {"storeCode": "SCOL70001430162", "store": "Alkosto Sincelejo", "account": "Alkosto", "supervisor": "Bermúdez Sariel Renzo Rafael", "cupos": 1.0}, {"storeCode": "SCOL11001430312", "store": "Ktronix Salitre", "account": "Alkosto", "supervisor": "Romero Herrera Manuel Fernando", "cupos": 2.0}, {"storeCode": "SCOL50001430317", "store": "Ktronix Villavicencio", "account": "Alkosto", "supervisor": "Diaz Hernandez Ingrid Kimberly", "cupos": 1.0}, {"storeCode": "SCOL11001430303", "store": "Ktronix 20 Julio", "account": "Alkosto", "supervisor": "Sepulveda Camacho Viviana Carolina", "cupos": 1.0}, {"storeCode": "SCOL50001110106", "store": "Cav Villavicencio Villa Centro", "account": "CLARO", "supervisor": "Diaz Hernandez Ingrid Kimberly", "cupos": 1.0}, {"storeCode": "SCOL05088430002", "store": "Alkomprar Bello", "account": "Alkomprar", "supervisor": "García Arana Brayan Steven", "cupos": 0.5}, {"storeCode": "SCOL11001430313", "store": "Ktronix Suba", "account": "Alkosto", "supervisor": "Aconcha Moreno Oscar Alberto", "cupos": 1.0}, {"storeCode": "SCOL05001430004", "store": "Alkomprar Florida", "account": "Alkomprar", "supervisor": "García Arana Brayan Steven", "cupos": 0.5}, {"storeCode": "SCOL25754110099", "store": "Cav Soacha Mercurio Ii", "account": "CLARO", "supervisor": "Diaz Hernandez Ingrid Kimberly", "cupos": 1.0}, {"storeCode": "SCOL05001430006", "store": "Alkomprar Mayorca", "account": "Alkomprar", "supervisor": "Estevez Perez Sneider", "cupos": 0.0}, {"storeCode": "SCOL15001430159", "store": "Ktronix Tunja", "account": "Alkosto", "supervisor": "Romero Herrera Manuel Fernando", "cupos": 1.0}, {"storeCode": "SCOL17001430293", "store": "Ktronix Manizales", "account": "Alkosto", "supervisor": "Santiago Ayala Bahamon", "cupos": 1.0}, {"storeCode": "SCOL54001110061", "store": "Cav Gran Colombia Cúcuta", "account": "CLARO", "supervisor": "Angie Rocio Calderon Arenis", "cupos": 1.0}, {"storeCode": "SCOL11001430310", "store": "Ktronix Plaza De Las Americas", "account": "Alkosto", "supervisor": "Diaz Hernandez Ingrid Kimberly", "cupos": 1.0}, {"storeCode": "SCOL25175430566", "store": "Ktronix Cc Fontanar Cajica", "account": "Alkosto", "supervisor": "Aconcha Moreno Oscar Alberto", "cupos": 1.0}, {"storeCode": "SCOL68276430391", "store": "Alkosto Floridablanca", "account": "Alkosto", "supervisor": "Angie Rocio Calderon Arenis", "cupos": 1.0}, {"storeCode": "SCOL25473430308", "store": "Ktronix Mosquera", "account": "Alkosto", "supervisor": "Cedeño Cordoba Ruben Alejandro", "cupos": 1.0}, {"storeCode": "SCOL50001110792", "store": "Cav Bogota Plaza Claro", "account": "CLARO", "supervisor": "Romero Herrera Manuel Fernando", "cupos": 2.0}, {"storeCode": "SCOL76001430010", "store": "Alkomprar Unico", "account": "Alkomprar", "supervisor": "Santiago Ayala Bahamon", "cupos": 0.5}, {"storeCode": "SCOL08001430045", "store": "Alkosto Barranquilla", "account": "Alkosto", "supervisor": "Bermúdez Sariel Renzo Rafael", "cupos": 1.0}, {"storeCode": "SGSCO027717", "store": "Alkosto El Eden", "account": "Alkosto", "supervisor": "Cedeño Cordoba Ruben Alejandro", "cupos": 1.0}, {"storeCode": "SCOL11001430307", "store": "Ktronix Centro Mayor", "account": "Alkosto", "supervisor": "Tatiana Barragan", "cupos": 1.0}, {"storeCode": "SCOL25754430039", "store": "Ktronix Soacha", "account": "Alkosto", "supervisor": "Diaz Hernandez Ingrid Kimberly", "cupos": 1.0}, {"storeCode": "SGSCO085439", "store": "Alkosto Cali Norte", "account": "Alkosto", "supervisor": "Santiago Ayala Bahamon", "cupos": 1.5}, {"storeCode": "SCOL50001430021", "store": "Alkosto Villavicencio Princ Cl. 31", "account": "Alkosto", "supervisor": "Diaz Hernandez Ingrid Kimberly", "cupos": 1.0}, {"storeCode": "SCOL11001430012", "store": "Alkosto 170", "account": "Alkosto", "supervisor": "Aconcha Moreno Oscar Alberto", "cupos": 3.0}, {"storeCode": "SCOL11001430014", "store": "Alkosto Bog Cr 30", "account": "Alkosto", "supervisor": "Sepulveda Camacho Viviana Carolina", "cupos": 1.0}, {"storeCode": "SCOL66001430019", "store": "Alkosto Pereira Av. Americas", "account": "Alkosto", "supervisor": "Santiago Ayala Bahamon", "cupos": 2.0}, {"storeCode": "SCOL76001430015", "store": "Alkosto Cali Cr. 80", "account": "Alkosto", "supervisor": "Mahecha De La Portilla Juan David", "cupos": 3.0}, {"storeCode": "SCOL11001430013", "store": "Alkosto Av 68", "account": "Alkosto", "supervisor": "Uribe Benitez Julian Alberto", "cupos": 4.0}, {"storeCode": "SCOL11001430020", "store": "Alkosto Venecia", "account": "Alkosto", "supervisor": "Tatiana Barragan", "cupos": 4.0}, {"storeCode": "SGSCO089511", "store": "Plaza Central HES", "account": "HES", "supervisor": "HES", "cupos": 2.0}, {"storeCode": "SGSCO091251", "store": "Santafe HES", "account": "HES", "supervisor": "HES", "cupos": 1.0}, {"storeCode": "SGSCO091250", "store": "Multiplaza HES", "account": "HES", "supervisor": "HES", "cupos": 2.0}, {"storeCode": "c230", "store": "Domic Btá Zf", "account": "CLARO", "supervisor": "Zamora Melo Leidy Johanna", "cupos": 7.0}, {"storeCode": "SGSCO091799", "store": "Panamericana Centro Mayor", "account": "Panamericana", "supervisor": "Tatiana Barragan", "cupos": 0.0}, {"storeCode": "SGSCO091802", "store": "Panamericana Suba Plaza", "account": "Panamericana", "supervisor": "Aconcha Moreno Oscar Alberto", "cupos": 0.0}, {"storeCode": "SGSCO091805", "store": "Panamericana Titan ", "account": "Panamericana", "supervisor": "Uribe Benitez Julian Alberto", "cupos": 0.0}, {"storeCode": "SGSCO091804", "store": "Panamericana Plaza de las Americas", "account": "Panamericana", "supervisor": "Diaz Hernandez Ingrid Kimberly", "cupos": 0.0}, {"storeCode": "SGSCO091810", "store": "Panamericana Buenavista", "account": "Panamericana", "supervisor": "Bermúdez Sariel Renzo Rafael", "cupos": 0.0}, {"storeCode": "SGSCO091812", "store": "Panamericana Poblado Medellin", "account": "Panamericana", "supervisor": "Estevez Perez Sneider", "cupos": 0.0}, {"storeCode": "SCOL05001230735", "store": "Panamericana Molinos Medellin", "account": "Panamericana", "supervisor": "García Arana Brayan Steven", "cupos": 0.0}, {"storeCode": "SGSCO091803", "store": "Panamericana Bucaramanga", "account": "Panamericana", "supervisor": "Romero Mendez Jhon Alexander", "cupos": 0.0}, {"storeCode": "SCOL11001331284", "store": "ALMACEN-19 CENTRO KR 7 CON 18", "account": "Panamericana", "supervisor": "Sepulveda Camacho Viviana Carolina", "cupos": 0.0}, {"storeCode": "SCOL11001430444", "store": "Panamericana Avenida Chile", "account": "Panamericana", "supervisor": "Aconcha Moreno Oscar Alberto", "cupos": 0.0}, {"storeCode": "SGSCO091806", "store": "Panamericana Unicentro Bogota", "account": "Panamericana", "supervisor": "Uribe Benitez Julian Alberto", "cupos": 0.0}, {"storeCode": "SCOL76001110051", "store": "Cav Cali Norte", "account": "CLARO", "supervisor": "Santiago Ayala Bahamon", "cupos": 0.0}, {"storeCode": "SCOL76001110053", "store": "Cav Cali Palmetto", "account": "CLARO", "supervisor": "Mahecha De La Portilla Juan David", "cupos": 0.0}, {"storeCode": "SCOL76001110073", "store": "Cav Cali Jardin", "account": "CLARO", "supervisor": "Mahecha De La Portilla Juan David", "cupos": 0.0}, {"storeCode": "SCOL11001110211", "store": "Cav Santafe T", "account": "CLARO", "supervisor": "Aconcha Moreno Oscar Alberto", "cupos": 0.0}, {"storeCode": "SCOL66001110087", "store": "Cav Pereira Estacion Central", "account": "CLARO", "supervisor": "Santiago Ayala Bahamon", "cupos": 0.0}, {"storeCode": "SCOL08001110048", "store": "Cav Barranquilla Metropolitano", "account": "CLARO", "supervisor": "Bermúdez Sariel Renzo Rafael", "cupos": 0.0}, {"storeCode": "SCOL11001110060", "store": "Cav Bogota Cra 8", "account": "CLARO", "supervisor": "Sepulveda Camacho Viviana Carolina", "cupos": 0.0}, {"storeCode": "SCOL68615110095", "store": "Cav Rionegro", "account": "CLARO", "supervisor": "Estevez Perez Sneider", "cupos": 0.0}, {"storeCode": "SCOL11001110056", "store": "Cav Bogota Chapinero", "account": "CLARO", "supervisor": "Aconcha Moreno Oscar Alberto", "cupos": 0.0}, {"storeCode": "SCOL76520110492", "store": "Cav Palmira Centro", "account": "CLARO", "supervisor": "Santiago Ayala Bahamon", "cupos": 0.0}, {"storeCode": "SCOL08001110047", "store": "Cav B/Quilla Centro", "account": "CLARO", "supervisor": "Bermúdez Sariel Renzo Rafael", "cupos": 0.0}, {"storeCode": "SGSCO083684", "store": "Cav Parque Alegra", "account": "CLARO", "supervisor": "Bermúdez Sariel Renzo Rafael", "cupos": 0.0}, {"storeCode": "SCOL11001110070", "store": "Cav Bogota Floresta", "account": "CLARO", "supervisor": "Uribe Benitez Julian Alberto", "cupos": 0.0}, {"storeCode": "SCOL25754110115", "store": "Cav Ventura Terrero", "account": "CLARO", "supervisor": "Diaz Hernandez Ingrid Kimberly", "cupos": 0.0}, {"storeCode": "SGSCO093271", "store": "Tienda Paseo Villa Del Rio", "account": "CLARO", "supervisor": "Diaz Hernandez Ingrid Kimberly", "cupos": 0.0}, {"storeCode": "SCOL08001430017", "store": "Alkomprar Unico Barranquilla", "account": "Alkomprar", "supervisor": "Bermúdez Sariel Renzo Rafael", "cupos": 0.0}, {"storeCode": "SCOL68001430003", "store": "Alkomprar Electro Bucaramanga", "account": "Alkomprar", "supervisor": "Romero Mendez Jhon Alexander", "cupos": 0.0}, {"storeCode": "SCOL05001430009", "store": "Alkomprar San Diego", "account": "Alkomprar", "supervisor": "García Arana Brayan Steven", "cupos": 0.0}, {"storeCode": "SCOL05001430295", "store": "Alkomprar Aventura", "account": "Alkomprar", "supervisor": "García Arana Brayan Steven", "cupos": 0.0}, {"storeCode": "SCOL66001430086", "store": "Alkomprar Pereira", "account": "Alkomprar", "supervisor": "Santiago Ayala Bahamon", "cupos": 0.0}, {"storeCode": "SCOL68547430038", "store": "Alkomprar Piedecuesta", "account": "Alkomprar", "supervisor": "Romero Mendez Jhon Alexander", "cupos": 0.0}, {"storeCode": "SGSCO080811", "store": "Alkomprar Fabricato", "account": "Alkomprar", "supervisor": "García Arana Brayan Steven", "cupos": 0.0}, {"storeCode": "SCOL68615430008", "store": "Alkomprar Rionegro", "account": "Alkomprar", "supervisor": "Estevez Perez Sneider", "cupos": 0.0}, {"storeCode": "SCOL68001430274", "store": "Alkomprar Bucaramanga", "account": "Alkomprar", "supervisor": "Romero Mendez Jhon Alexander", "cupos": 0.0}, {"storeCode": "SGSCO080589", "store": "Alkomprar Jardin Plaza", "account": "Alkomprar", "supervisor": "Mahecha De La Portilla Juan David", "cupos": 0.0}, {"storeCode": "SGSCO093272", "store": "Alkomprar C.C. La Central", "account": "Alkomprar", "supervisor": "García Arana Brayan Steven", "cupos": 0.0}, {"storeCode": "C200", "store": "Tienda Virtual", "account": "CLARO", "supervisor": "Zamora Melo Leidy Johanna", "cupos": 1.0}, {"storeCode": "SGSCO032510", "store": "Alkomprar Armenia", "account": "Alkomprar", "supervisor": "Santiago Ayala Bahamon", "cupos": 1.0}, {"storeCode": "SGSCO027720", "store": "Falabella Arkadia", "account": "Falabella", "supervisor": "García Arana Brayan Steven", "cupos": 0.0}, {"storeCode": "SCOL66001430179", "store": "Falabella Av Circunva # 5 - 20 - Pereira", "account": "Falabella", "supervisor": "Santiago Ayala Bahamon", "cupos": 0.0}, {"storeCode": "SGSCO027719", "store": "Falabella Buenavista", "account": "Falabella", "supervisor": "Bermúdez Sariel Renzo Rafael", "cupos": 0.0}, {"storeCode": "SCOL11001430129", "store": "Falabella La Felicidad", "account": "Falabella", "supervisor": "Cedeño Cordoba Ruben Alejandro", "cupos": 0.0}, {"storeCode": "SCOL50001430285", "store": "Falabella Primavera", "account": "Falabella", "supervisor": "Diaz Hernandez Ingrid Kimberly", "cupos": 0.0}, {"storeCode": "SCOL17001430299", "store": "Falabella La Carola", "account": "Falabella", "supervisor": "Santiago Ayala Bahamon", "cupos": 0.0}]};
+
+// Build storeCode -> {supervisor, cupos, store, account} lookup
+const storeMap = {};
+COVERAGE.stores.forEach(s => { storeMap[s.storeCode] = s; });
+
+// ── STATE ─────────────────────────────────────────────────────
+let swipeRaw = null, swipeFile = '';
+let supervisors = [], promoterRows = [];
+let activeSpv = null, selectedDate = '';
+
+// ── UPLOAD ────────────────────────────────────────────────────
+const dropZone = document.getElementById('drop-zone');
+const swipeInput = document.getElementById('swipeInput');
+
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('drag'); const f = e.dataTransfer.files[0]; if(f) readFile(f); });
+swipeInput.addEventListener('change', e => { const f = e.target.files[0]; if(f) readFile(f); });
+
+function readFile(file) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const wb = XLSX.read(ev.target.result, { type: 'array', cellDates: true });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    swipeRaw = XLSX.utils.sheet_to_json(ws, { defval: '' });
+    swipeFile = file.name;
+    populateDateFilter();
+    buildDashboard();
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+// ── DATE FILTER ───────────────────────────────────────────────
+function toDateStr(val) {
+  if (!val) return '';
+  if (val instanceof Date) return val.toISOString().substring(0,10);
+  if (typeof val === 'string') return val.substring(0,10);
+  if (typeof val === 'number') return new Date(Math.round((val-25569)*86400000)).toISOString().substring(0,10);
+  return '';
+}
+function fmtDate(d) {
+  if (!d) return '';
+  const [y,m,day] = d.split('-');
+  const mo = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  return parseInt(day)+' '+mo[parseInt(m)-1]+' '+y;
+}
+function populateDateFilter() {
+  const dates = [...new Set(swipeRaw.map(r => toDateStr(r['Date'])).filter(Boolean))].sort().reverse();
+  const sel = document.getElementById('date-filter');
+  sel.innerHTML = '';
+  dates.forEach((d,i) => {
+    const o = document.createElement('option'); o.value=d; o.textContent=fmtDate(d);
+    if(i===0){o.selected=true; selectedDate=d;}
+    sel.appendChild(o);
+  });
+}
+function applyDateFilter() {
+  selectedDate = document.getElementById('date-filter').value;
+  buildDashboard();
+}
+
+// ── BUILD ─────────────────────────────────────────────────────
+function buildDashboard() {
+  // Only Promoters from swipe for selected date
+  const swipe = swipeRaw.filter(r => r['Duty']==='Promoter' && toDateStr(r['Date'])===selectedDate);
+
+  // Count presentes per store
+  const presentMap = {};
+  swipe.forEach(r => {
+    const code = r['Store Code']||'';
+    const checkin = r['First Check In']||r['First Check in']||'';
+    if(!presentMap[code]) presentMap[code]=0;
+    if(checkin!=='') presentMap[code]++;
+  });
+
+  // Build store-level data from embedded coverage
+  const storeData = COVERAGE.stores.map(s => {
+    const presentes = Math.round(Math.min(presentMap[s.storeCode]||0, s.cupos));
+    const ausentes = Math.round(Math.max(Math.ceil(s.cupos) - presentes, 0));
+    const pct = s.cupos>0 ? Math.min(Math.round(presentes/s.cupos*100),100) : 0;
+    return { ...s, presentes, ausentes, pct };
+  });
+
+  // Group by supervisor (exclude Non-HW — already not in Promoter filter)
+  const spvMap = {};
+  storeData.forEach(s => {
+    if(!spvMap[s.supervisor]) spvMap[s.supervisor]=[];
+    spvMap[s.supervisor].push(s);
+  });
+  supervisors = Object.entries(spvMap).map(([name, stores]) => {
+    const tc = stores.reduce((a,b)=>a+b.cupos,0);
+    const tp = stores.reduce((a,b)=>a+b.presentes,0);
+    const ta = stores.reduce((a,b)=>a+b.ausentes,0);
+    const pct = tc>0 ? Math.min(Math.round(tp/tc*100),100) : 0;
+    return { name, stores: stores.sort((a,b)=>a.pct-b.pct), totalCupos:tc, totalPresentes:tp, totalAusentes:ta, pct };
+  }).sort((a,b)=>a.name.localeCompare(b.name));
+
+  // Promoter detail rows with supervisor from coverage
+  promoterRows = swipe.map(r => {
+    const code = r['Store Code']||'';
+    const store = storeMap[code];
+    const checkin = r['First Check In']||r['First Check in']||'';
+    const isPresent = checkin!=='';
+    return {
+      name: cleanName(r['Name']||''),
+      supervisor: store ? store.supervisor : '—',
+      store: r['Store Name']||'',
+      city: r['City']||'',
+      firstCheckin: fmtCheckin(checkin),
+      status: r['Status']||'',
+      timeInStore: r['Time in store(Mins)']!=='' ? Math.round(Number(r['Time in store(Mins)'])) : '',
+      isPresent
+    };
+  });
+
+  // Populate supervisor filter
+  const spvSel = document.getElementById('f-spv');
+  spvSel.innerHTML='<option value="">Todos los supervisores</option>';
+  supervisors.forEach(s=>{ const o=document.createElement('option'); o.value=s.name; o.textContent=s.name; spvSel.appendChild(o); });
+
+  // Cities
+  const cities=[...new Set(promoterRows.map(r=>r.city).filter(Boolean))].sort();
+  const citySel=document.getElementById('f-city');
+  citySel.innerHTML='<option value="">Todas las ciudades</option>';
+  cities.forEach(c=>{ const o=document.createElement('option'); o.value=c; o.textContent=c; citySel.appendChild(o); });
+
+  // Meta
+  document.getElementById('meta-date').textContent = fmtDate(selectedDate);
+  document.getElementById('meta-file').textContent = swipeFile + ' · Cobertura ' + COVERAGE.month;
+
+  // Global stats
+  const tc=supervisors.reduce((a,b)=>a+b.totalCupos,0);
+  const tp=supervisors.reduce((a,b)=>a+b.totalPresentes,0);
+  const ta=supervisors.reduce((a,b)=>a+b.totalAusentes,0);
+  const pctG=tc>0?Math.round(tp/tc*100):0;
+  const alerta=supervisors.filter(s=>s.pct<70).length;
+  document.getElementById('global-stats').innerHTML=`
+    <div class="stat"><div class="stat-label">Supervisores</div><div class="stat-val">${supervisors.length}</div><div class="stat-sub">activos</div></div>
+    <div class="stat"><div class="stat-label">Cupos</div><div class="stat-val">${Math.round(tc)}</div><div class="stat-sub">aprobados</div></div>
+    <div class="stat"><div class="stat-label">Presentes</div><div class="stat-val green">${tp}</div><div class="stat-sub">con check-in</div></div>
+    <div class="stat"><div class="stat-label">Ausentes</div><div class="stat-val red">${ta}</div><div class="stat-sub">sin check-in</div></div>
+    <div class="stat"><div class="stat-label">Cobertura</div><div class="stat-val ${pctG>=80?'green':pctG>=60?'amber':'red'}">${pctG}%</div><div class="stat-sub">global</div></div>
+    <div class="stat"><div class="stat-label">En alerta</div><div class="stat-val ${alerta>0?'red':'green'}">${alerta}</div><div class="stat-sub">spv &lt;70%</div></div>
+  `;
+
+  renderGrid();
+  renderPromoters();
+  document.getElementById('upload-view').style.display='none';
+  document.getElementById('dash-view').style.display='block';
+  document.getElementById('btn-export').style.display='block';
+  document.getElementById('btn-reset').style.display='block';
+  closeDetail();
+}
+
+// ── GRID ──────────────────────────────────────────────────────
+function renderGrid() {
+  const grid=document.getElementById('spv-grid');
+  grid.innerHTML='';
+  supervisors.forEach(spv=>{
+    const p=spv.pct;
+    const cls=p>=80?'pct-g':p>=60?'pct-a':'pct-r';
+    const bc=p>=80?'var(--green)':p>=60?'#f59e0b':'var(--red)';
+    const div=document.createElement('div');
+    div.className='spv-card'+(activeSpv===spv.name?' active':'');
+    div.innerHTML=`
+      <div class="spv-top"><span class="spv-name">${spv.name}</span><span class="spv-pct ${cls}">${p}%</span></div>
+      <div class="spv-bar-track"><div class="spv-bar-fill" style="width:${p}%;background:${bc}"></div></div>
+      <div class="spv-nums"><span>✅ <b>${spv.totalPresentes}</b> · ❌ <b>${spv.totalAusentes}</b></span><span>${spv.stores.length} tiendas</span></div>
+    `;
+    div.addEventListener('click',()=>openDetail(spv,div));
+    grid.appendChild(div);
+  });
+}
+
+// ── DETAIL ────────────────────────────────────────────────────
+function openDetail(spv,card) {
+  document.querySelectorAll('.spv-card').forEach(c=>c.classList.remove('active'));
+  if(activeSpv===spv.name){closeDetail();return;}
+  activeSpv=spv.name;
+  card.classList.add('active');
+  document.getElementById('detail-title').textContent=spv.name;
+  drawChart(spv);
+  renderStoreTable(spv);
+  const panel=document.getElementById('detail-panel');
+  panel.style.display='block';
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function closeDetail(){
+  activeSpv=null;
+  document.getElementById('detail-panel').style.display='none';
+  document.querySelectorAll('.spv-card').forEach(c=>c.classList.remove('active'));
+}
+
+// ── CHART ─────────────────────────────────────────────────────
+function drawChart(spv) {
+  const stores=spv.stores.filter(s=>s.cupos>0);
+  const n=stores.length;
+  const bW=26, gap=12, padL=32, padR=10, padT=22, padB=54, cH=130;
+  const W=Math.max(padL+padR+n*(bW*2+6+gap),280);
+  const H=padT+cH+padB;
+  const svg=document.getElementById('chart-svg');
+  svg.setAttribute('width',W); svg.setAttribute('height',H); svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  let html='';
+  [0,25,50,75,100].forEach(v=>{
+    const y=padT+cH-(v/100)*cH;
+    html+=`<line x1="${padL-4}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#f3f4f6" stroke-width="1"/>`;
+    html+=`<text x="${padL-6}" y="${y+4}" font-size="9" fill="#9ca3af" text-anchor="end">${v}</text>`;
+  });
+  const gW=bW*2+6;
+  stores.forEach((s,i)=>{
+    const gx=padL+i*(gW+gap);
+    const hP=s.cupos>0?(s.presentes/s.cupos)*cH:0;
+    const hA=s.cupos>0?(s.ausentes/s.cupos)*cH:0;
+    const nm=s.store.length>11?s.store.substring(0,10)+'…':s.store;
+    const yP=padT+cH-hP;
+    html+=`<rect x="${gx}" y="${padT+cH}" width="${bW}" height="0" fill="#1a7f37" rx="2" opacity=".85">
+      <animate attributeName="height" from="0" to="${hP.toFixed(1)}" dur=".3s" fill="freeze" begin="${i*.03}s"/>
+      <animate attributeName="y" from="${padT+cH}" to="${yP.toFixed(1)}" dur=".3s" fill="freeze" begin="${i*.03}s"/>
+    </rect>`;
+    if(s.presentes>0) html+=`<text x="${gx+bW/2}" y="${Math.max(yP-3,padT+10)}" font-size="9" font-weight="600" fill="#1a7f37" text-anchor="middle">${s.presentes}</text>`;
+    const xA=gx+bW+6; const yA=padT+cH-hA;
+    html+=`<rect x="${xA}" y="${padT+cH}" width="${bW}" height="0" fill="#CF0A2C" rx="2" opacity=".75">
+      <animate attributeName="height" from="0" to="${hA.toFixed(1)}" dur=".3s" fill="freeze" begin="${i*.03}s"/>
+      <animate attributeName="y" from="${padT+cH}" to="${yA.toFixed(1)}" dur=".3s" fill="freeze" begin="${i*.03}s"/>
+    </rect>`;
+    if(s.ausentes>0) html+=`<text x="${xA+bW/2}" y="${Math.max(yA-3,padT+10)}" font-size="9" font-weight="600" fill="#CF0A2C" text-anchor="middle">${s.ausentes}</text>`;
+    html+=`<text x="${gx+bW+3}" y="${H-padB+13}" font-size="9" fill="#6b7280" text-anchor="middle">${nm}</text>`;
+    html+=`<text x="${gx+bW+3}" y="${H-padB+24}" font-size="8" fill="#9ca3af" text-anchor="middle">${s.pct}%</text>`;
+  });
+  html+=`<rect x="${padL}" y="${H-16}" width="10" height="8" fill="#1a7f37" rx="1"/><text x="${padL+13}" y="${H-9}" font-size="9" fill="#4b5563">Presentes</text>`;
+  html+=`<rect x="${padL+72}" y="${H-16}" width="10" height="8" fill="#CF0A2C" rx="1"/><text x="${padL+85}" y="${H-9}" font-size="9" fill="#4b5563">Ausentes</text>`;
+  svg.innerHTML=html;
+}
+
+// ── STORE TABLE ───────────────────────────────────────────────
+function renderStoreTable(spv){
+  const tbody=document.getElementById('detail-tbody'); tbody.innerHTML='';
+  spv.stores.forEach(s=>{
+    const tr=document.createElement('tr');
+    if(s.presentes===0&&s.cupos>0) tr.className='row-zero';
+    const c=s.pct>=80?'#1a7f37':s.pct>=60?'#f59e0b':'#CF0A2C';
+    tr.innerHTML=`<td style="font-weight:500">${s.store}</td><td><span class="chip chip-gray">${s.account}</span></td><td>${Math.round(s.cupos)}</td><td style="color:var(--green);font-weight:600">${s.presentes}</td><td style="color:var(--red);font-weight:600">${s.ausentes}</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:${s.pct}%;background:${c}"></div></div><span style="font-size:11px;font-weight:600;color:${c};min-width:30px">${s.pct}%</span></div></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ── PROMOTER TAB ──────────────────────────────────────────────
+function renderPromoters(){
+  const spvF=document.getElementById('f-spv').value;
+  const stF=document.getElementById('f-status').value;
+  const ctF=document.getElementById('f-city').value;
+  const srF=document.getElementById('f-search').value.toLowerCase();
+  const filtered=promoterRows.filter(r=>{
+    if(spvF&&r.supervisor!==spvF) return false;
+    if(ctF&&r.city!==ctF) return false;
+    if(srF&&!r.name.toLowerCase().includes(srF)&&!r.store.toLowerCase().includes(srF)) return false;
+    if(stF==='present'&&!r.isPresent) return false;
+    if(stF==='absent'&&r.isPresent) return false;
+    if(stF==='Normal'&&r.status!=='Normal') return false;
+    if(stF==='Abnormal'&&r.status!=='Abnormal') return false;
+    return true;
+  });
+  const absent=promoterRows.filter(r=>!r.isPresent&&(!spvF||r.supervisor===spvF));
+  const banner=document.getElementById('absent-banner');
+  if(absent.length>0){banner.style.display='block';banner.innerHTML=`<strong>⚠ Sin check-in (${absent.length}):</strong> ${absent.map(r=>r.name).join(' · ')}`;}
+  else banner.style.display='none';
+  const tbody=document.getElementById('promoter-tbody'); tbody.innerHTML='';
+  document.getElementById('tbl-summary').textContent=filtered.length?`${filtered.length} registros`:'';
+  const empty=document.getElementById('promoter-empty');
+  if(!filtered.length){empty.style.display='block';return;} empty.style.display='none';
+  filtered.forEach(r=>{
+    const tr=document.createElement('tr');
+    if(!r.isPresent) tr.className='row-absent';
+    const chip=!r.isPresent?'<span class="chip chip-bad">Ausente</span>':r.status==='Abnormal'?'<span class="chip chip-warn">Anormal</span>':'<span class="chip chip-ok">Normal</span>';
+    tr.innerHTML=`<td style="font-weight:500">${r.name}</td><td style="font-size:12px;color:var(--gray-600)">${r.supervisor}</td><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${r.store}">${r.store}</td><td>${r.city||'—'}</td><td style="font-size:12px;color:var(--gray-600)">${r.firstCheckin||'—'}</td><td>${chip}</td><td style="text-align:right;font-size:12px">${r.timeInStore!==''?r.timeInStore:'—'}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ── TABS ──────────────────────────────────────────────────────
+function switchTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+}
+
+// ── UTILS ─────────────────────────────────────────────────────
+function cleanName(n){ if(!n) return ''; const p=String(n).trim().split(' '); if(p[0]&&/^\d+$/.test(p[0])) p.shift(); return p.join(' '); }
+function fmtCheckin(val){ if(!val) return ''; if(val instanceof Date) return val.toISOString().replace('T',' ').substring(0,16); return String(val).substring(0,16); }
+
+// ── EXPORT ────────────────────────────────────────────────────
+function exportCSV(){
+  const rows=[['Supervisor','Tienda','Cadena','Cupos','Presentes','Ausentes','Cobertura %']];
+  supervisors.forEach(spv=>spv.stores.forEach(s=>rows.push([spv.name,s.store,s.account,Math.round(s.cupos),s.presentes,s.ausentes,s.pct])));
+  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'})); a.download='cobertura.csv'; a.click();
+}
+
+// ── RESET ─────────────────────────────────────────────────────
+function resetApp(){
+  swipeRaw=null; supervisors=[]; promoterRows=[]; activeSpv=null;
+  document.getElementById('swipeInput').value='';
+  document.getElementById('upload-view').style.display='block';
+  document.getElementById('dash-view').style.display='none';
+  document.getElementById('btn-export').style.display='none';
+  document.getElementById('btn-reset').style.display='none';
+  closeDetail();
+}
+
+// ── SERVICE WORKER ────────────────────────────────────────────
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').then(reg=>{
+    reg.addEventListener('updatefound',()=>{
+      reg.installing.addEventListener('statechange',e=>{
+        if(e.target.state==='installed'&&navigator.serviceWorker.controller)
+          document.getElementById('update-banner').style.display='flex';
+      });
+    });
+  });
+}
+</script>
+</body>
+</html>
